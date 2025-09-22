@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fahri - Software Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .light-theme .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-icon {
+            font-size: 1.5rem;
+        }
+
+        .status-bar {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hero-section {
+            text-align: left;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-text h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .light-theme .profile-text h1 {
+            background: linear-gradient(45deg, #333333, #666666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wave {
+            display: inline-block;
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            /* memastikan foto bulat dan tidak ada background yang terlihat */
+            display: inline-block;
+            /* agar ukurannya sesuai konten */
+        }
+
+        .profile-image img.profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* optional: shadow di sekitar foto */
+        .light-theme .profile-image {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: none;
+            /* hapus background gradient */
+        }
+
+
+        .description {
+            font-size: 1.1rem;
+            color: #cccccc;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+
+        .light-theme .description {
+            color: #666666;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .section:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #ffffff;
+            position: relative;
+            padding-left: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .light-theme .section h2 {
+            color: #333333;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Work Item Expandable Styles */
+        .work-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .light-theme .work-item {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .work-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .light-theme .work-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .work-item.expanded {
+            margin-bottom: 0;
+            border-radius: 12px 12px 0 0;
+            z-index: 2;
+        }
+
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: none;
+            /* hapus gradient jika ingin logo tampil full */
+            flex-shrink: 0;
+        }
+
+        .company-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* mempertahankan proporsi logo */
+            display: block;
+        }
+
+        .work-details {
+            flex: 1;
+        }
+
+        .work-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+
+        .light-theme .work-title {
+            color: #333333;
+        }
+
+        .work-company {
+            color: #aaaaaa;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .light-theme .work-company {
+            color: #666666;
+        }
+
+        .work-period {
+            color: #888888;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .light-theme .work-period {
+            color: #888888;
+        }
+
+        .expand-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .work-item.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 0 0 12px 12px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: none;
+        }
+
+        .light-theme .project-details {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .project-details.expanded {
+            max-height: 1000px;
+        }
+
+        .project-content {
+            padding: 25px;
+        }
+
+        .project-description {
+            color: #cccccc;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        .light-theme .project-description {
+            color: #555555;
+        }
+
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-image:hover {
+            transform: scale(1.03);
+        }
+
+        .about-text {
+            color: #cccccc;
+            font-size: 1rem;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+
+        .light-theme .about-text {
+            color: #555555;
+        }
+
+        .about-text a {
+            color: #667eea;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .about-text a:hover {
+            color: #764ba2;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .skill-tag {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .light-theme .skill-tag {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .skill-tag:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(20deg);
+            }
+
+            75% {
+                transform: rotate(-10deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .profile-text h1 {
+                font-size: 2rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .work-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+
+            .project-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Floating particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .light-theme .particle {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.1;
+            }
+
+            50% {
+                transform: translateY(-20px) translateX(10px);
+                opacity: 0.3;
+            }
+        }
+
+        /* Modal for image view */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="dark-theme">
+    <div class="theme-toggle" id="themeToggle">
+        <div class="theme-icon">🌙</div>
+    </div>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="status-bar" id="status-bar"></div>
+
+        <div class="hero-section">
+            <div class="profile-header">
+                <div class="profile-text">
+                    <h1>Hi, I'm Saiful Kamil <span class="wave">👋</span></h1>
+                </div>
+                <div class="profile-image">
+                    <img src="https://media.licdn.com/dms/image/v2/D5603AQG7j752WCV_fQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1702545108000?e=1761177600&v=beta&t=u6kuC8JQpkMdz9sSYdQeVbgW3mVq8DjosE9Q1F0N5nk"
+                        alt="saiful" class="profile-photo">
+                </div>
+            </div>
+            <div class="description">
+                Software developer with 3 years of experience in mobile development, proficient in Dart and Java. Also
+                skilled in UI/UX design to support the creation of intuitive and visually engaging applications.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>About</h2>
+            <div class="about-text">
+                I started my professional coding journey in 2023 with an internship at Stechoq Robotika Indonesia.
+                Currently, I work as a
+                <strong>Mobile Developer at IndowebHost Kreasi</strong>. I've also <strong>enjoy participating in
+                    hackathons, where I've proudly won awards.</strong>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Skills</h2>
+            <div class="skills">
+                <span class="skill-tag">Flutter</span>
+                <span class="skill-tag">Dart</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">UI/UX Design</span>
+                <span class="skill-tag">Mobile Development</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Work Experience</h2>
+
+            <div class="work-item" onclick="toggleWorkDetail('indowebhost')">
+                <div class="company-logo">
+                    <img src="data:image/jpeg;base64,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"
+                        alt="IndowebHost Logo" class="company-logo-img">
+                </div>
+                <div class="work-details">
+                    <div class="work-title">Mobile Developer</div>
+                    <div class="work-company">IndowebHost Kreasi</div>
+                    <div class="work-period">2024 Oktober - Present</div>
+                </div>
+                <div class="expand-icon">▼</div>
+            </div>
+            <div class="project-details" id="indowebhost-details">
+                <div class="project-content">
+                    <div class="project-description">
+                        Worked as a Mobile Programmer and UI/UX Designer on the Digi Agri and Socfindo Lateks Deres
+                        projects, developing mobile applications to streamline digital farm management and monitor latex
+                        production, featuring an intuitive and user-friendly interface.
+                    </div>
+                    <div class="project-gallery">
+                        <img src="assets/digi.png"
+                            alt="Mobile App Development" class="project-image" onclick="openModal(this)">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E2DAQEPLGoPBO3uWA/profile-treasury-image-shrink_800_800/B4EZiFCWpnGUAY-/0/1754578653482?e=1759125600&v=beta&t=jYs9rLjNgNsJB-nR3TABNDXZd92LfokrqS_ly4DEF3Y"
+                            alt="UI Design" class="project-image" onclick="openModal(this)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="work-item" onclick="toggleWorkDetail('stechoq')">
+                <div class="company-logo">
+                    <img src="https://jurnalpost.com/wp-content/uploads/2022/12/Farm-Engginering.webp" alt="IndowebHost Logo"
+                        class="company-logo-img">
+                </div>
+                <div class="work-details">
+                    <div class="work-title">Intern Developer</div>
+                    <div class="work-company">Stechoq Robotika Indonesia</div>
+                    <div class="work-period">2023 Agustus - 2024 Desember</div>
+                </div>
+                <div class="expand-icon">▼</div>
+            </div>
+            <div class="project-details" id="stechoq-details">
+                <div class="project-content">
+                    <div class="project-description">
+                        Started my professional journey as an intern. Worked on robotics software and mobile
+                        applications
+                        for device control. Gained foundational knowledge in IoT and embedded systems programming.
+                    </div>
+                    <div class="project-gallery">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Robotics Programming" class="project-image" onclick="openModal(this)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="work-item" onclick="toggleWorkDetail('hackathon')">
+                <div class="company-logo">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAcCAMAAACnDzTfAAAAZlBMVEVHcEzuAv/tAv/oBf/yAP/uAv/UDv/gCf/NEf9oRf/NEf+uH//eCf/RD/+uH/+xHv+cJ/+SLP+VK/9FT/9cRf+XKf9jQf9qPv9sPf+BM/85Vf9lQf9JTf8rW/9USP8oXP8ZZP8jX/+p1SncAAAAInRSTlMAhEQ8TFkRMk4FbWJ3Kh1CKTpwESRTelFARE9iRnQ0P0ZefU+JYAAAAQ1JREFUeAF1kAWOxDAQBDtkyprtMPn/nzyfKAqVNKIaxoUCn5Rl9a1Qf8mmruvmXRUEAHkdSUhVo6GEvJUBtKYfhaz8p34KLlrGqqzq5sdvSirNpCiFbCpJccVYSKpyUFTyqiycd4ooIgURqC7OBWtUbHXLlKRS4IIxxhqnhKJSXnr6rh+GcRwtdKaqmt/5gOA73w2jtdFmJ8iPnKWYQvCDmqOLrdLESHYe54NfQt+PGPkYtdFEklOu0zRv29z3/WxtG+Nl0T0smdCFfhxHXJ/mV8+3sM05oByubJi2fUK/DQM2XDn2BA7kmMcBV/ixH0da0rIMA7/XpePYV6x5o3nAA77y1a/4IE0Jn1zVH2VVElf0tnC/AAAAAElFTkSuQmCC"
+                        alt="IndowebHost Logo" class="company-logo-img">
+                </div>
+                <div class="work-details">
+                    <div class="work-title">Hackathon Participant</div>
+                    <div class="work-company">Various Events</div>
+                    <div class="work-period">2022 - 2023</div>
+                </div>
+                <div class="expand-icon">▼</div>
+            </div>
+            <div class="project-details" id="hackathon-details">
+                <div class="project-content">
+                    <div class="project-description">
+                        Participated in multiple hackathons, developing innovative solutions under time constraints.
+                        Won awards for creating impactful mobile applications that solve real-world problems.
+                    </div>
+                    <div class="project-gallery">
+                        <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Hackathon Event" class="project-image" onclick="openModal(this)">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Award Ceremony" class="project-image" onclick="openModal(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for image view -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Toggle theme functionality
+        function greetingByTime() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting;
+
+            if (hour >= 5 && hour < 11) {
+                greeting = "Selamat Pagi 🌅";
+            } else if (hour >= 11 && hour < 15) {
+                greeting = "Selamat Siang ☀️";
+            } else if (hour >= 15 && hour < 18) {
+                greeting = "Selamat Sore 🌇";
+            } else {
+                greeting = "Selamat Malam 🌙";
+            }
+
+            document.getElementById("status-bar").textContent = greeting;
+        }
+
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+
+        // Check for saved theme preference or respect OS preference
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+            body.classList.add('light-theme');
+            body.classList.remove('dark-theme');
+            themeIcon.textContent = '☀️';
+        } else {
+            body.classList.add('dark-theme');
+            body.classList.remove('light-theme');
+            themeIcon.textContent = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+                // Random position
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+
+                // Random animation delay
+                particle.style.animationDelay = Math.random() * 6 + 's';
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Toggle work detail expansion
+        function toggleWorkDetail(id) {
+            const workItem = document.querySelector(`[onclick="toggleWorkDetail('${id}')"]`);
+            const details = document.getElementById(`${id}-details`);
+
+            // Close all other expanded items
+            document.querySelectorAll('.work-item.expanded').forEach(item => {
+                if (item !== workItem) {
+                    item.classList.remove('expanded');
+                }
+            });
+
+            document.querySelectorAll('.project-details.expanded').forEach(detail => {
+                if (detail !== details) {
+                    detail.classList.remove('expanded');
+                }
+            });
+
+            // Toggle current item
+            workItem.classList.toggle('expanded');
+            details.classList.toggle('expanded');
+        }
+
+        // Image modal functions
+        function openModal(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'flex';
+            modalImg.src = img.src;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function (event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            greetingByTime();
+            setInterval(greetingByTime, 60 * 1000); // Update greeting every minute
+        });
+    </script>
+</body>
+
+</html>

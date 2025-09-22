@@ -296,6 +296,23 @@
             transform: rotate(180deg);
         }
 
+        .social-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .social-link img {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-link img:hover {
+            transform: scale(1.2);
+        }
+
         .project-details {
             max-height: 0;
             overflow: hidden;
@@ -375,28 +392,36 @@
         .skills {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
             margin-top: 20px;
         }
 
         .skill-tag {
-            background: rgba(102, 126, 234, 0.2);
-            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 8px 16px;
             border-radius: 20px;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
             font-size: 0.9rem;
             border: 1px solid rgba(102, 126, 234, 0.3);
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .light-theme .skill-tag {
-            background: rgba(102, 126, 234, 0.1);
+        .skill-tag img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            padding: 5px;
         }
 
         .skill-tag:hover {
-            background: rgba(102, 126, 234, 0.3);
             transform: scale(1.05);
+            background: rgba(102, 126, 234, 0.3);
         }
+
 
         @keyframes fadeInUp {
             to {
@@ -565,14 +590,25 @@
         <div class="section">
             <h2>Skills</h2>
             <div class="skills">
-                <span class="skill-tag">Flutter</span>
-                <span class="skill-tag">Dart</span>
-                <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">Java</span>
+                <div class="skill-tag">
+                    <img src="https://cdn.iconscout.com/icon/free/png-256/free-flutter-logo-icon-svg-download-png-2944876.png"
+                        alt="Flutter">
+                </div>
+                <div class="skill-tag">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" alt="Dart">
+                </div>
+                <div class="skill-tag">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript">
+                </div>
+                <div class="skill-tag">
+                    <img src="https://cdn.iconscout.com/icon/free/png-256/free-java-logo-icon-svg-download-png-1720088.png?f=webp" alt="Java">
+                </div>
                 <span class="skill-tag">UI/UX Design</span>
                 <span class="skill-tag">Mobile Development</span>
             </div>
         </div>
+
+
 
         <div class="section">
             <h2>Work Experience</h2>
@@ -653,9 +689,26 @@
                         Won awards for creating impactful mobile applications that solve real-world problems.
                     </div>
                     <div class="project-gallery">
-                        <img src="https://media.licdn.com/dms/image/v2/D5622AQEeNWdZI1-QgQ/feedshare-shrink_800/feedshare-shrink_800/0/1692555172282?e=1761177600&v=beta&t=_6G_w_9bGarw0eDK6NHYoiF1641LsOZGRgOpgmL3RUY"
+                        <img src="assets/vocaject.png"
                             alt="Hackathon Event" class="project-image" onclick="openModal(this)">
                     </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Connect with Me</h2>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/saiful-kamil-89884b21b" target="_blank" class="social-link">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1024px-LinkedIn_icon.svg.png"
+                            alt="LinkedIn">
+                    </a>
+                    <a href="https://github.com/Saifulkamil" target="_blank" class="social-link">
+                        <img src="assets/github.png" alt="GitHub">
+                    </a>
+                    <a href="https://www.instagram.com/saifulkamil_" target="_blank" class="social-link">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg"
+                            alt="Instagram">
+                    </a>
+
                 </div>
             </div>
         </div>
